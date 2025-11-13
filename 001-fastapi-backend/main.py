@@ -6,29 +6,27 @@ from fastapi.responses import PlainTextResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-# routers
 from routers import todos
-
 import config
 
 app = FastAPI()
 
-# ✅ montar el router de todos
-app.include_router(todos.router)
-
-# ✅ CORS abierto (para Vercel / local)
+# ✅ CORS: permite llamadas desde cualquier origen (incluido Vercel)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],          # si quieres, luego lo limitamos a tu dominio de Vercel
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ✅ manejador global de excepciones HTTP
+# ✅ montar el router de todos
+app.include_router(todos.router)
+
+# ✅ manejador de errores HTTP
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request, exc):
-    print(f"{repr(exc)}")
+    print(repr(exc))
     return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
 
 # ✅ settings
