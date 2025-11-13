@@ -6,23 +6,17 @@ from fastapi.responses import PlainTextResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-# routers: comment out next line till create them
+# routers
 from routers import todos
 
 import config
 
 app = FastAPI()
 
-
+# ✅ montar el router de todos
 app.include_router(todos.router)
 
-
-#origins = [
-#    "http://localhost:3000",
-#    "https://todo-frontend-khaki.vercel.app/",
-#]
-
-# CORS configuration, needed for frontend development
+# ✅ CORS abierto (para Vercel / local)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -31,25 +25,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-# global http exception handler, to handle errors
+# ✅ manejador global de excepciones HTTP
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request, exc):
     print(f"{repr(exc)}")
     return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
 
-# to use the settings
+# ✅ settings
 @lru_cache()
 def get_settings():
     return config.Settings()
 
-
 @app.get("/")
 def read_root(settings: config.Settings = Depends(get_settings)):
-    # print the app_name configuration
     print(settings.app_name)
     return "Hello World"
-
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
