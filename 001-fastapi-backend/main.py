@@ -3,33 +3,34 @@ from typing import Union
 
 from fastapi import FastAPI, Depends
 from fastapi.responses import PlainTextResponse
-from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from routers import todos
 import config
 
 app = FastAPI()
 
-# ✅ CORS: permite llamadas desde cualquier origen (incluido Vercel)
+# ========= CORS =========
+# De momento dejamos todo abierto. Más tarde se puede limitar a tu dominio de Vercel.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],          # si quieres, luego lo limitamos a tu dominio de Vercel
+    allow_origins=["*"],          # aquí luego podrías poner tu dominio de Vercel si quieres
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ✅ montar el router de todos
+# ========= Routers =========
 app.include_router(todos.router)
 
-# ✅ manejador de errores HTTP
+# ========= Handlers =========
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request, exc):
     print(repr(exc))
     return PlainTextResponse(str(exc.detail), status_code=exc.status_code)
 
-# ✅ settings
+# ========= Settings =========
 @lru_cache()
 def get_settings():
     return config.Settings()
