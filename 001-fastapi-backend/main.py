@@ -16,8 +16,11 @@ app = FastAPI()
 # Cuando quieras puedes limitarlo a tu dominio de Vercel.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["todo-app2-r35e5gxjc-alvarodimoni-9967s-projects.vercel.app" ,
-                   "https://todo-app2-66k6.onrender.com" ],          # si quieres, luego lo cambias por una lista concreta
+    allow_origins=["https://todo-app2-r35e5gxjc-alvarodimoni-9967s-projects.vercel.app" ,
+                   "https://todo-app2-66k6.onrender.com" ,
+                   "https://todo-app2-teal.vercel.app",
+                   "http://localhost:3000",
+                   "http://localhost:8000"],          # si quieres, luego lo cambias por una lista concreta
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -36,7 +39,7 @@ async def http_exception_handler(request, exc):
 
 # ===== Configuración =====
 @lru_cache()
-def get_settings():
+def get_settings():D
     return config.Settings()
 
 
