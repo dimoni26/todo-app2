@@ -16,7 +16,8 @@ app = FastAPI()
 # Cuando quieras puedes limitarlo a tu dominio de Vercel.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],          # si quieres, luego lo cambias por una lista concreta
+    allow_origins=["todo-app2-r35e5gxjc-alvarodimoni-9967s-projects.vercel.app" ,
+                   "https://todo-app2-66k6.onrender.com" ],          # si quieres, luego lo cambias por una lista concreta
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
