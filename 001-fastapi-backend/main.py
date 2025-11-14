@@ -39,7 +39,7 @@ async def http_exception_handler(request, exc):
 
 # ===== Configuración =====
 @lru_cache()
-def get_settings():D
+def get_settings():
     return config.Settings()
 
 
